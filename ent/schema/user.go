@@ -16,6 +16,8 @@ func (User) Fields() []ent.Field {
 		field.String("name").Default("unknown"),
 		field.String("surname").Default("unknown"),
 		field.String("email").Default("unknown"),
+		field.String("username").Default("unknown"),
+		field.String("password").Default("unknown"),
 	}
 }
 

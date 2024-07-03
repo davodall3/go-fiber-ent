@@ -1,4 +1,4 @@
-package client
+package database
 
 import (
 	"context"
@@ -12,12 +12,6 @@ func DbConnection() *ent.Client {
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	defer func(client *ent.Client) {
-		err := client.Close()
-		if err != nil {
-			log.Fatalf("failed creating schema resources: %v", err)
-		}
-	}(client)
 	// Run the auto migration tool.
 	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)

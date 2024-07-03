@@ -1,11 +1,22 @@
 definitions:
-  model.CreateUserResponse:
+  model.LoginUserRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserResponse:
     properties:
       email:
         type: string
       name:
         type: string
+      password:
+        type: string
       surname:
+        type: string
+      username:
         type: string
     required:
     - email
@@ -15,6 +26,32 @@ definitions:
 info:
   contact: {}
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login Users
+      parameters:
+      - description: Request of Creating User Object
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Login User
+      tags:
+      - Auth
   /users:
     post:
       consumes:
@@ -26,7 +63,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.CreateUserResponse'
+          $ref: '#/definitions/model.UserResponse'
       produces:
       - application/json
       responses:
@@ -39,6 +76,25 @@ paths:
           schema:
             type: string
       summary: Creating User
+      tags:
+      - Users
+  /users/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting Users with given request
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Getting Users
       tags:
       - Users
 swagger: "2.0"

@@ -61,6 +61,20 @@ func (uc *UserCreate) SetNillableEmail(s *string) *UserCreate {
 	return uc
 }
 
+// SetBalance sets the "balance" field.
+func (uc *UserCreate) SetBalance(f float64) *UserCreate {
+	uc.mutation.SetBalance(f)
+	return uc
+}
+
+// SetNillableBalance sets the "balance" field if the given value is not nil.
+func (uc *UserCreate) SetNillableBalance(f *float64) *UserCreate {
+	if f != nil {
+		uc.SetBalance(*f)
+	}
+	return uc
+}
+
 // SetUsername sets the "username" field.
 func (uc *UserCreate) SetUsername(s string) *UserCreate {
 	uc.mutation.SetUsername(s)
@@ -136,6 +150,10 @@ func (uc *UserCreate) defaults() {
 		v := user.DefaultEmail
 		uc.mutation.SetEmail(v)
 	}
+	if _, ok := uc.mutation.Balance(); !ok {
+		v := user.DefaultBalance
+		uc.mutation.SetBalance(v)
+	}
 	if _, ok := uc.mutation.Username(); !ok {
 		v := user.DefaultUsername
 		uc.mutation.SetUsername(v)
@@ -156,6 +174,9 @@ func (uc *UserCreate) check() error {
 	}
 	if _, ok := uc.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "User.email"`)}
+	}
+	if _, ok := uc.mutation.Balance(); !ok {
+		return &ValidationError{Name: "balance", err: errors.New(`ent: missing required field "User.balance"`)}
 	}
 	if _, ok := uc.mutation.Username(); !ok {
 		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "User.username"`)}
@@ -200,6 +221,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	if value, ok := uc.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 		_node.Email = value
+	}
+	if value, ok := uc.mutation.Balance(); ok {
+		_spec.SetField(user.FieldBalance, field.TypeFloat64, value)
+		_node.Balance = value
 	}
 	if value, ok := uc.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)

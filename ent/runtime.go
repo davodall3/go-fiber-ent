@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"projectSwagger/ent/product"
 	"projectSwagger/ent/schema"
 	"projectSwagger/ent/user"
 )
@@ -11,6 +12,16 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	productFields := schema.Product{}.Fields()
+	_ = productFields
+	// productDescName is the schema descriptor for name field.
+	productDescName := productFields[0].Descriptor()
+	// product.DefaultName holds the default value on creation for the name field.
+	product.DefaultName = productDescName.Default.(string)
+	// productDescPrice is the schema descriptor for price field.
+	productDescPrice := productFields[1].Descriptor()
+	// product.DefaultPrice holds the default value on creation for the price field.
+	product.DefaultPrice = productDescPrice.Default.(float64)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
@@ -25,12 +36,16 @@ func init() {
 	userDescEmail := userFields[2].Descriptor()
 	// user.DefaultEmail holds the default value on creation for the email field.
 	user.DefaultEmail = userDescEmail.Default.(string)
+	// userDescBalance is the schema descriptor for balance field.
+	userDescBalance := userFields[3].Descriptor()
+	// user.DefaultBalance holds the default value on creation for the balance field.
+	user.DefaultBalance = userDescBalance.Default.(float64)
 	// userDescUsername is the schema descriptor for username field.
-	userDescUsername := userFields[3].Descriptor()
+	userDescUsername := userFields[4].Descriptor()
 	// user.DefaultUsername holds the default value on creation for the username field.
 	user.DefaultUsername = userDescUsername.Default.(string)
 	// userDescPassword is the schema descriptor for password field.
-	userDescPassword := userFields[4].Descriptor()
+	userDescPassword := userFields[5].Descriptor()
 	// user.DefaultPassword holds the default value on creation for the password field.
 	user.DefaultPassword = userDescPassword.Default.(string)
 }

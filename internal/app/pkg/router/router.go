@@ -11,15 +11,22 @@ func SetupRoutes(app *fiber.App) {
 	// DB database
 	client := database.DbConnection()
 
+	// Add mock data
+	database.AddProducts(client)
+
 	// Services
 	userService := service.NewUserService(client)
 	authService := service.NewAuthService(client)
+	productService := service.NewProductService(client)
 
 	// Handlers
 	userHandler := handler.NewUserHandler(*userService)
-	authHandler := handler.NehAuthHandler(*authService)
-
+	authHandler := handler.NewAuthHandler(*authService)
+	productHandler := handler.NewProductHandler(*productService)
+	// API
 	app.Post("/users", userHandler.CreateUserHandler)
 	app.Get("/users/all", userHandler.GetAllUsersHandler)
 	app.Post("/login", authHandler.LoginUserHandler)
+	app.Get("/products/all", productHandler.GetAllProductsHandler)
+	app.Post("/products/buy", productHandler.BuyProductHandler)
 }

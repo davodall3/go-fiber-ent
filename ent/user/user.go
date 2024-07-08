@@ -17,6 +17,8 @@ const (
 	FieldSurname = "surname"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
+	// FieldBalance holds the string denoting the balance field in the database.
+	FieldBalance = "balance"
 	// FieldUsername holds the string denoting the username field in the database.
 	FieldUsername = "username"
 	// FieldPassword holds the string denoting the password field in the database.
@@ -31,6 +33,7 @@ var Columns = []string{
 	FieldName,
 	FieldSurname,
 	FieldEmail,
+	FieldBalance,
 	FieldUsername,
 	FieldPassword,
 }
@@ -52,6 +55,8 @@ var (
 	DefaultSurname string
 	// DefaultEmail holds the default value on creation for the "email" field.
 	DefaultEmail string
+	// DefaultBalance holds the default value on creation for the "balance" field.
+	DefaultBalance float64
 	// DefaultUsername holds the default value on creation for the "username" field.
 	DefaultUsername string
 	// DefaultPassword holds the default value on creation for the "password" field.
@@ -79,6 +84,11 @@ func BySurname(opts ...sql.OrderTermOption) OrderOption {
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByBalance orders the results by the balance field.
+func ByBalance(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBalance, opts...).ToFunc()
 }
 
 // ByUsername orders the results by the username field.

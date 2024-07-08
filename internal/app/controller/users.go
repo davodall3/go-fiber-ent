@@ -13,11 +13,11 @@ func GetUsers(app *fiber.App) fiber.Router {
 		if err != nil {
 			log.Fatal(err)
 		}
-		var users []model.UserResponse
+		var users []model.UserBody
 		rows, err := db.Query("SELECT * FROM users")
 		defer rows.Close()
 		for rows.Next() {
-			user := new(model.UserResponse)
+			user := new(model.UserBody)
 			users = append(users, *user)
 			log.Println("aaaaaaa", user)
 		}
@@ -27,7 +27,7 @@ func GetUsers(app *fiber.App) fiber.Router {
 
 func CreateUser(app *fiber.App) fiber.Router {
 	return app.Post("/users", func(ctx *fiber.Ctx) error {
-		var request model.UserResponse
+		var request model.UserBody
 		err := ctx.BodyParser(&request)
 		if err != nil {
 			return err

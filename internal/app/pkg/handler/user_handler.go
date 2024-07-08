@@ -23,12 +23,12 @@ func NewUserHandler(service service.UserService) *UserHandler {
 //	@Tags			Users
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		model.UserResponse	true	"Request of Creating User Object"
+//	@Param			request	body		model.UserBody	true	"Request of Creating User Object"
 //	@Success		200		{string}	string
 //	@Failure		400		{string}	string	"Bad Request"
 //	@Router			/users [post]
 func (h *UserHandler) CreateUserHandler(c *fiber.Ctx) error {
-	payload := new(model.UserResponse)
+	payload := new(model.UserBody)
 	if err := c.BodyParser(payload); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Payload error",

@@ -1,4 +1,11 @@
 definitions:
+  model.BuyProductBody:
+    properties:
+      product_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   model.LoginUserRequest:
     properties:
       password:
@@ -6,8 +13,10 @@ definitions:
       username:
         type: string
     type: object
-  model.UserResponse:
+  model.UserBody:
     properties:
+      balance:
+        type: number
       email:
         type: string
       name:
@@ -52,6 +61,51 @@ paths:
       summary: Login User
       tags:
       - Auth
+  /products/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting products with given request
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Getting products
+      tags:
+      - Products
+  /products/buy:
+    post:
+      consumes:
+      - application/json
+      description: Buying product with given request
+      parameters:
+      - description: Request of Buying Product Object
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.BuyProductBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Buying product
+      tags:
+      - Products
   /users:
     post:
       consumes:
@@ -63,7 +117,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/model.UserResponse'
+          $ref: '#/definitions/model.UserBody'
       produces:
       - application/json
       responses:

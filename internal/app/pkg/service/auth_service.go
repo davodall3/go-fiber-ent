@@ -22,6 +22,5 @@ func (s *AuthService) Login(payload *model.LoginUserRequest) (*ent.User, error) 
 	if err != nil {
 		return nil, err
 	}
-
 	return user, nil
 }

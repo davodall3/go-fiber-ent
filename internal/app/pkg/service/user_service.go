@@ -14,13 +14,14 @@ func NewUserService(client *ent.Client) *UserService {
 	return &UserService{Client: client}
 }
 
-func (s UserService) CreateUser(response *model.UserResponse) (*ent.User, error) {
+func (s UserService) CreateUser(response *model.UserBody) (*ent.User, error) {
 	user, err := s.Client.User.Create().
 		SetName(response.Name).
 		SetSurname(response.Surname).
 		SetEmail(response.Email).
 		SetUsername(response.Username).
 		SetPassword(response.Password).
+		SetBalance(response.Balance).
 		Save(context.Background())
 	if err != nil {
 		return nil, err

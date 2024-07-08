@@ -69,6 +69,27 @@ func (uu *UserUpdate) SetNillableEmail(s *string) *UserUpdate {
 	return uu
 }
 
+// SetBalance sets the "balance" field.
+func (uu *UserUpdate) SetBalance(f float64) *UserUpdate {
+	uu.mutation.ResetBalance()
+	uu.mutation.SetBalance(f)
+	return uu
+}
+
+// SetNillableBalance sets the "balance" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableBalance(f *float64) *UserUpdate {
+	if f != nil {
+		uu.SetBalance(*f)
+	}
+	return uu
+}
+
+// AddBalance adds f to the "balance" field.
+func (uu *UserUpdate) AddBalance(f float64) *UserUpdate {
+	uu.mutation.AddBalance(f)
+	return uu
+}
+
 // SetUsername sets the "username" field.
 func (uu *UserUpdate) SetUsername(s string) *UserUpdate {
 	uu.mutation.SetUsername(s)
@@ -147,6 +168,12 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
 	}
+	if value, ok := uu.mutation.Balance(); ok {
+		_spec.SetField(user.FieldBalance, field.TypeFloat64, value)
+	}
+	if value, ok := uu.mutation.AddedBalance(); ok {
+		_spec.AddField(user.FieldBalance, field.TypeFloat64, value)
+	}
 	if value, ok := uu.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)
 	}
@@ -212,6 +239,27 @@ func (uuo *UserUpdateOne) SetNillableEmail(s *string) *UserUpdateOne {
 	if s != nil {
 		uuo.SetEmail(*s)
 	}
+	return uuo
+}
+
+// SetBalance sets the "balance" field.
+func (uuo *UserUpdateOne) SetBalance(f float64) *UserUpdateOne {
+	uuo.mutation.ResetBalance()
+	uuo.mutation.SetBalance(f)
+	return uuo
+}
+
+// SetNillableBalance sets the "balance" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableBalance(f *float64) *UserUpdateOne {
+	if f != nil {
+		uuo.SetBalance(*f)
+	}
+	return uuo
+}
+
+// AddBalance adds f to the "balance" field.
+func (uuo *UserUpdateOne) AddBalance(f float64) *UserUpdateOne {
+	uuo.mutation.AddBalance(f)
 	return uuo
 }
 
@@ -322,6 +370,12 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Email(); ok {
 		_spec.SetField(user.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := uuo.mutation.Balance(); ok {
+		_spec.SetField(user.FieldBalance, field.TypeFloat64, value)
+	}
+	if value, ok := uuo.mutation.AddedBalance(); ok {
+		_spec.AddField(user.FieldBalance, field.TypeFloat64, value)
 	}
 	if value, ok := uuo.mutation.Username(); ok {
 		_spec.SetField(user.FieldUsername, field.TypeString, value)

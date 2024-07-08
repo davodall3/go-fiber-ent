@@ -55,6 +55,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/products/all": {
+            "get": {
+                "description": "Getting products with given request",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Getting products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/buy": {
+            "post": {
+                "description": "Buying product with given request",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Buying product",
+                "parameters": [
+                    {
+                        "description": "Request of Buying Product Object",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.BuyProductBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "Creating User with given request",
@@ -75,7 +144,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserResponse"
+                            "$ref": "#/definitions/model.UserBody"
                         }
                     }
                 ],
@@ -126,6 +195,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "model.BuyProductBody": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "model.LoginUserRequest": {
             "type": "object",
             "properties": {
@@ -137,7 +217,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserResponse": {
+        "model.UserBody": {
             "type": "object",
             "required": [
                 "email",
@@ -145,6 +225,9 @@ const docTemplate = `{
                 "surname"
             ],
             "properties": {
+                "balance": {
+                    "type": "number"
+                },
                 "email": {
                     "type": "string"
                 },

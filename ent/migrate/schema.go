@@ -8,12 +8,25 @@ import (
 )
 
 var (
+	// ProductsColumns holds the columns for the "products" table.
+	ProductsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString, Default: "unknown"},
+		{Name: "price", Type: field.TypeFloat64, Default: 0},
+	}
+	// ProductsTable holds the schema information for the "products" table.
+	ProductsTable = &schema.Table{
+		Name:       "products",
+		Columns:    ProductsColumns,
+		PrimaryKey: []*schema.Column{ProductsColumns[0]},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Default: "unknown"},
 		{Name: "surname", Type: field.TypeString, Default: "unknown"},
 		{Name: "email", Type: field.TypeString, Default: "unknown"},
+		{Name: "balance", Type: field.TypeFloat64, Default: 0},
 		{Name: "username", Type: field.TypeString, Default: "unknown"},
 		{Name: "password", Type: field.TypeString, Default: "unknown"},
 	}
@@ -25,6 +38,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		ProductsTable,
 		UsersTable,
 	}
 )

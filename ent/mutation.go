@@ -13,6 +13,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/shopspring/decimal"
 )
 
 const (
@@ -35,8 +36,8 @@ type ProductMutation struct {
 	typ           string
 	id            *int
 	name          *string
-	price         *float64
-	addprice      *float64
+	price         *decimal.Decimal
+	addprice      *decimal.Decimal
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Product, error)
@@ -178,13 +179,13 @@ func (m *ProductMutation) ResetName() {
 }
 
 // SetPrice sets the "price" field.
-func (m *ProductMutation) SetPrice(f float64) {
-	m.price = &f
+func (m *ProductMutation) SetPrice(d decimal.Decimal) {
+	m.price = &d
 	m.addprice = nil
 }
 
 // Price returns the value of the "price" field in the mutation.
-func (m *ProductMutation) Price() (r float64, exists bool) {
+func (m *ProductMutation) Price() (r decimal.Decimal, exists bool) {
 	v := m.price
 	if v == nil {
 		return
@@ -195,7 +196,7 @@ func (m *ProductMutation) Price() (r float64, exists bool) {
 // OldPrice returns the old "price" field's value of the Product entity.
 // If the Product object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ProductMutation) OldPrice(ctx context.Context) (v float64, err error) {
+func (m *ProductMutation) OldPrice(ctx context.Context) (v decimal.Decimal, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPrice is only allowed on UpdateOne operations")
 	}
@@ -209,17 +210,17 @@ func (m *ProductMutation) OldPrice(ctx context.Context) (v float64, err error) {
 	return oldValue.Price, nil
 }
 
-// AddPrice adds f to the "price" field.
-func (m *ProductMutation) AddPrice(f float64) {
+// AddPrice adds d to the "price" field.
+func (m *ProductMutation) AddPrice(d decimal.Decimal) {
 	if m.addprice != nil {
-		*m.addprice += f
+		*m.addprice = m.addprice.Add(d)
 	} else {
-		m.addprice = &f
+		m.addprice = &d
 	}
 }
 
 // AddedPrice returns the value that was added to the "price" field in this mutation.
-func (m *ProductMutation) AddedPrice() (r float64, exists bool) {
+func (m *ProductMutation) AddedPrice() (r decimal.Decimal, exists bool) {
 	v := m.addprice
 	if v == nil {
 		return
@@ -316,7 +317,7 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case product.FieldPrice:
-		v, ok := value.(float64)
+		v, ok := value.(decimal.Decimal)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -353,7 +354,7 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ProductMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case product.FieldPrice:
-		v, ok := value.(float64)
+		v, ok := value.(decimal.Decimal)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -453,8 +454,8 @@ type UserMutation struct {
 	name          *string
 	surname       *string
 	email         *string
-	balance       *float64
-	addbalance    *float64
+	balance       *decimal.Decimal
+	addbalance    *decimal.Decimal
 	username      *string
 	password      *string
 	clearedFields map[string]struct{}
@@ -670,13 +671,13 @@ func (m *UserMutation) ResetEmail() {
 }
 
 // SetBalance sets the "balance" field.
-func (m *UserMutation) SetBalance(f float64) {
-	m.balance = &f
+func (m *UserMutation) SetBalance(d decimal.Decimal) {
+	m.balance = &d
 	m.addbalance = nil
 }
 
 // Balance returns the value of the "balance" field in the mutation.
-func (m *UserMutation) Balance() (r float64, exists bool) {
+func (m *UserMutation) Balance() (r decimal.Decimal, exists bool) {
 	v := m.balance
 	if v == nil {
 		return
@@ -687,7 +688,7 @@ func (m *UserMutation) Balance() (r float64, exists bool) {
 // OldBalance returns the old "balance" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldBalance(ctx context.Context) (v float64, err error) {
+func (m *UserMutation) OldBalance(ctx context.Context) (v decimal.Decimal, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldBalance is only allowed on UpdateOne operations")
 	}
@@ -701,17 +702,17 @@ func (m *UserMutation) OldBalance(ctx context.Context) (v float64, err error) {
 	return oldValue.Balance, nil
 }
 
-// AddBalance adds f to the "balance" field.
-func (m *UserMutation) AddBalance(f float64) {
+// AddBalance adds d to the "balance" field.
+func (m *UserMutation) AddBalance(d decimal.Decimal) {
 	if m.addbalance != nil {
-		*m.addbalance += f
+		*m.addbalance = m.addbalance.Add(d)
 	} else {
-		m.addbalance = &f
+		m.addbalance = &d
 	}
 }
 
 // AddedBalance returns the value that was added to the "balance" field in this mutation.
-func (m *UserMutation) AddedBalance() (r float64, exists bool) {
+func (m *UserMutation) AddedBalance() (r decimal.Decimal, exists bool) {
 	v := m.addbalance
 	if v == nil {
 		return
@@ -922,7 +923,7 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetEmail(v)
 		return nil
 	case user.FieldBalance:
-		v, ok := value.(float64)
+		v, ok := value.(decimal.Decimal)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -973,7 +974,7 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 func (m *UserMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case user.FieldBalance:
-		v, ok := value.(float64)
+		v, ok := value.(decimal.Decimal)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // Product holds the schema definition for the Product entity.
@@ -14,7 +15,8 @@ type Product struct {
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Default("unknown"),
-		field.Float("price").Default(0.0),
+		field.Float("price").
+			GoType(decimal.Decimal{}),
 	}
 }
 

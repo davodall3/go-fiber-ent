@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -70,23 +71,23 @@ func (uu *UserUpdate) SetNillableEmail(s *string) *UserUpdate {
 }
 
 // SetBalance sets the "balance" field.
-func (uu *UserUpdate) SetBalance(f float64) *UserUpdate {
+func (uu *UserUpdate) SetBalance(d decimal.Decimal) *UserUpdate {
 	uu.mutation.ResetBalance()
-	uu.mutation.SetBalance(f)
+	uu.mutation.SetBalance(d)
 	return uu
 }
 
 // SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableBalance(f *float64) *UserUpdate {
-	if f != nil {
-		uu.SetBalance(*f)
+func (uu *UserUpdate) SetNillableBalance(d *decimal.Decimal) *UserUpdate {
+	if d != nil {
+		uu.SetBalance(*d)
 	}
 	return uu
 }
 
-// AddBalance adds f to the "balance" field.
-func (uu *UserUpdate) AddBalance(f float64) *UserUpdate {
-	uu.mutation.AddBalance(f)
+// AddBalance adds d to the "balance" field.
+func (uu *UserUpdate) AddBalance(d decimal.Decimal) *UserUpdate {
+	uu.mutation.AddBalance(d)
 	return uu
 }
 
@@ -243,23 +244,23 @@ func (uuo *UserUpdateOne) SetNillableEmail(s *string) *UserUpdateOne {
 }
 
 // SetBalance sets the "balance" field.
-func (uuo *UserUpdateOne) SetBalance(f float64) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetBalance(d decimal.Decimal) *UserUpdateOne {
 	uuo.mutation.ResetBalance()
-	uuo.mutation.SetBalance(f)
+	uuo.mutation.SetBalance(d)
 	return uuo
 }
 
 // SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableBalance(f *float64) *UserUpdateOne {
-	if f != nil {
-		uuo.SetBalance(*f)
+func (uuo *UserUpdateOne) SetNillableBalance(d *decimal.Decimal) *UserUpdateOne {
+	if d != nil {
+		uuo.SetBalance(*d)
 	}
 	return uuo
 }
 
-// AddBalance adds f to the "balance" field.
-func (uuo *UserUpdateOne) AddBalance(f float64) *UserUpdateOne {
-	uuo.mutation.AddBalance(f)
+// AddBalance adds d to the "balance" field.
+func (uuo *UserUpdateOne) AddBalance(d decimal.Decimal) *UserUpdateOne {
+	uuo.mutation.AddBalance(d)
 	return uuo
 }
 

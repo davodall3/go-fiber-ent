@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/shopspring/decimal"
 	"projectSwagger/ent"
 	"projectSwagger/internal/app/model"
 )
@@ -21,7 +22,7 @@ func (s UserService) CreateUser(response *model.UserBody) (*ent.User, error) {
 		SetEmail(response.Email).
 		SetUsername(response.Username).
 		SetPassword(response.Password).
-		SetBalance(response.Balance).
+		SetBalance(decimal.NewFromFloat(response.Balance)).
 		Save(context.Background())
 	if err != nil {
 		return nil, err

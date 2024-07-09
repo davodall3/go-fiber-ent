@@ -55,8 +55,6 @@ var (
 	DefaultSurname string
 	// DefaultEmail holds the default value on creation for the "email" field.
 	DefaultEmail string
-	// DefaultBalance holds the default value on creation for the "balance" field.
-	DefaultBalance float64
 	// DefaultUsername holds the default value on creation for the "username" field.
 	DefaultUsername string
 	// DefaultPassword holds the default value on creation for the "password" field.

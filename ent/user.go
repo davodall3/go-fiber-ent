@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/shopspring/decimal"
 )
 
 // User is the model entity for the User schema.
@@ -23,7 +24,7 @@ type User struct {
 	// Email holds the value of the "email" field.
 	Email string `json:"email,omitempty"`
 	// Balance holds the value of the "balance" field.
-	Balance float64 `json:"balance,omitempty"`
+	Balance decimal.Decimal `json:"balance,omitempty"`
 	// Username holds the value of the "username" field.
 	Username string `json:"username,omitempty"`
 	// Password holds the value of the "password" field.
@@ -37,7 +38,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case user.FieldBalance:
-			values[i] = new(sql.NullFloat64)
+			values[i] = new(decimal.Decimal)
 		case user.FieldID:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName, user.FieldSurname, user.FieldEmail, user.FieldUsername, user.FieldPassword:
@@ -82,10 +83,10 @@ func (u *User) assignValues(columns []string, values []any) error {
 				u.Email = value.String
 			}
 		case user.FieldBalance:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*decimal.Decimal); !ok {
 				return fmt.Errorf("unexpected type %T for field balance", values[i])
-			} else if value.Valid {
-				u.Balance = value.Float64
+			} else if value != nil {
+				u.Balance = *value
 			}
 		case user.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {

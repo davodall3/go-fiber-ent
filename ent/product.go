@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/shopspring/decimal"
 )
 
 // Product is the model entity for the Product schema.
@@ -19,7 +20,7 @@ type Product struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Price holds the value of the "price" field.
-	Price        float64 `json:"price,omitempty"`
+	Price        decimal.Decimal `json:"price,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -29,7 +30,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 	for i := range columns {
 		switch columns[i] {
 		case product.FieldPrice:
-			values[i] = new(sql.NullFloat64)
+			values[i] = new(decimal.Decimal)
 		case product.FieldID:
 			values[i] = new(sql.NullInt64)
 		case product.FieldName:
@@ -62,10 +63,10 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				pr.Name = value.String
 			}
 		case product.FieldPrice:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*decimal.Decimal); !ok {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
-			} else if value.Valid {
-				pr.Price = value.Float64
+			} else if value != nil {
+				pr.Price = *value
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])

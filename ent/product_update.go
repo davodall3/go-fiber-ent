@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // ProductUpdate is the builder for updating Product entities.
@@ -42,23 +43,23 @@ func (pu *ProductUpdate) SetNillableName(s *string) *ProductUpdate {
 }
 
 // SetPrice sets the "price" field.
-func (pu *ProductUpdate) SetPrice(f float64) *ProductUpdate {
+func (pu *ProductUpdate) SetPrice(d decimal.Decimal) *ProductUpdate {
 	pu.mutation.ResetPrice()
-	pu.mutation.SetPrice(f)
+	pu.mutation.SetPrice(d)
 	return pu
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (pu *ProductUpdate) SetNillablePrice(f *float64) *ProductUpdate {
-	if f != nil {
-		pu.SetPrice(*f)
+func (pu *ProductUpdate) SetNillablePrice(d *decimal.Decimal) *ProductUpdate {
+	if d != nil {
+		pu.SetPrice(*d)
 	}
 	return pu
 }
 
-// AddPrice adds f to the "price" field.
-func (pu *ProductUpdate) AddPrice(f float64) *ProductUpdate {
-	pu.mutation.AddPrice(f)
+// AddPrice adds d to the "price" field.
+func (pu *ProductUpdate) AddPrice(d decimal.Decimal) *ProductUpdate {
+	pu.mutation.AddPrice(d)
 	return pu
 }
 
@@ -147,23 +148,23 @@ func (puo *ProductUpdateOne) SetNillableName(s *string) *ProductUpdateOne {
 }
 
 // SetPrice sets the "price" field.
-func (puo *ProductUpdateOne) SetPrice(f float64) *ProductUpdateOne {
+func (puo *ProductUpdateOne) SetPrice(d decimal.Decimal) *ProductUpdateOne {
 	puo.mutation.ResetPrice()
-	puo.mutation.SetPrice(f)
+	puo.mutation.SetPrice(d)
 	return puo
 }
 
 // SetNillablePrice sets the "price" field if the given value is not nil.
-func (puo *ProductUpdateOne) SetNillablePrice(f *float64) *ProductUpdateOne {
-	if f != nil {
-		puo.SetPrice(*f)
+func (puo *ProductUpdateOne) SetNillablePrice(d *decimal.Decimal) *ProductUpdateOne {
+	if d != nil {
+		puo.SetPrice(*d)
 	}
 	return puo
 }
 
-// AddPrice adds f to the "price" field.
-func (puo *ProductUpdateOne) AddPrice(f float64) *ProductUpdateOne {
-	puo.mutation.AddPrice(f)
+// AddPrice adds d to the "price" field.
+func (puo *ProductUpdateOne) AddPrice(d decimal.Decimal) *ProductUpdateOne {
+	puo.mutation.AddPrice(d)
 	return puo
 }
 

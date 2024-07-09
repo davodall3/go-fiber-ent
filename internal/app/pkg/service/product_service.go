@@ -48,15 +48,15 @@ func (p *ProductService) BuyProduct(payload *model.BuyProductBody) (*ent.User, e
 		return nil, productError
 	}
 
-	hasBalance := u.Balance - prod.Price
+	difference := u.Balance.Sub(prod.Price)
 
-	if hasBalance < 0 {
+	if difference.IsNegative() {
 		return nil, &template.Error{Name: "The user's balance is insufficient"}
 	}
 
 	updatedUser, err := p.Client.User.
 		UpdateOneID(u.ID).
-		SetBalance(hasBalance).
+		SetBalance(difference).
 		Save(context.Background())
 
 	if err != nil {

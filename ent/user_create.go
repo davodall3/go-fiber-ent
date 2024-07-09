@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // UserCreate is the builder for creating a User entity.
@@ -62,16 +63,8 @@ func (uc *UserCreate) SetNillableEmail(s *string) *UserCreate {
 }
 
 // SetBalance sets the "balance" field.
-func (uc *UserCreate) SetBalance(f float64) *UserCreate {
-	uc.mutation.SetBalance(f)
-	return uc
-}
-
-// SetNillableBalance sets the "balance" field if the given value is not nil.
-func (uc *UserCreate) SetNillableBalance(f *float64) *UserCreate {
-	if f != nil {
-		uc.SetBalance(*f)
-	}
+func (uc *UserCreate) SetBalance(d decimal.Decimal) *UserCreate {
+	uc.mutation.SetBalance(d)
 	return uc
 }
 
@@ -149,10 +142,6 @@ func (uc *UserCreate) defaults() {
 	if _, ok := uc.mutation.Email(); !ok {
 		v := user.DefaultEmail
 		uc.mutation.SetEmail(v)
-	}
-	if _, ok := uc.mutation.Balance(); !ok {
-		v := user.DefaultBalance
-		uc.mutation.SetBalance(v)
 	}
 	if _, ok := uc.mutation.Username(); !ok {
 		v := user.DefaultUsername

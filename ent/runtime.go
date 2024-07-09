@@ -18,10 +18,6 @@ func init() {
 	productDescName := productFields[0].Descriptor()
 	// product.DefaultName holds the default value on creation for the name field.
 	product.DefaultName = productDescName.Default.(string)
-	// productDescPrice is the schema descriptor for price field.
-	productDescPrice := productFields[1].Descriptor()
-	// product.DefaultPrice holds the default value on creation for the price field.
-	product.DefaultPrice = productDescPrice.Default.(float64)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.
@@ -36,10 +32,6 @@ func init() {
 	userDescEmail := userFields[2].Descriptor()
 	// user.DefaultEmail holds the default value on creation for the email field.
 	user.DefaultEmail = userDescEmail.Default.(string)
-	// userDescBalance is the schema descriptor for balance field.
-	userDescBalance := userFields[3].Descriptor()
-	// user.DefaultBalance holds the default value on creation for the balance field.
-	user.DefaultBalance = userDescBalance.Default.(float64)
 	// userDescUsername is the schema descriptor for username field.
 	userDescUsername := userFields[4].Descriptor()
 	// user.DefaultUsername holds the default value on creation for the username field.

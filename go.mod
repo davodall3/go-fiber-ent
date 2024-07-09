@@ -8,8 +8,8 @@ require (
 	entgo.io/ent v0.13.1
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/swagger v1.0.0
-	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.16
+	github.com/shopspring/decimal v1.4.0
 	github.com/swaggo/swag v1.16.3
 )
 
@@ -25,6 +25,7 @@ require (
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.21.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect

@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // User holds the schema definition for the User entity.
@@ -16,7 +17,8 @@ func (User) Fields() []ent.Field {
 		field.String("name").Default("unknown"),
 		field.String("surname").Default("unknown"),
 		field.String("email").Default("unknown"),
-		field.Float("balance").Default(0.0),
+		field.Float("balance").
+			GoType(decimal.Decimal{}),
 		field.String("username").Default("unknown"),
 		field.String("password").Default("unknown"),
 	}

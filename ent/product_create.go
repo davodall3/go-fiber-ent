@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/shopspring/decimal"
 )
 
 // ProductCreate is the builder for creating a Product entity.
@@ -34,16 +35,8 @@ func (pc *ProductCreate) SetNillableName(s *string) *ProductCreate {
 }
 
 // SetPrice sets the "price" field.
-func (pc *ProductCreate) SetPrice(f float64) *ProductCreate {
-	pc.mutation.SetPrice(f)
-	return pc
-}
-
-// SetNillablePrice sets the "price" field if the given value is not nil.
-func (pc *ProductCreate) SetNillablePrice(f *float64) *ProductCreate {
-	if f != nil {
-		pc.SetPrice(*f)
-	}
+func (pc *ProductCreate) SetPrice(d decimal.Decimal) *ProductCreate {
+	pc.mutation.SetPrice(d)
 	return pc
 }
 
@@ -85,10 +78,6 @@ func (pc *ProductCreate) defaults() {
 	if _, ok := pc.mutation.Name(); !ok {
 		v := product.DefaultName
 		pc.mutation.SetName(v)
-	}
-	if _, ok := pc.mutation.Price(); !ok {
-		v := product.DefaultPrice
-		pc.mutation.SetPrice(v)
 	}
 }
 

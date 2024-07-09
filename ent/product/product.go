@@ -39,8 +39,6 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultName holds the default value on creation for the "name" field.
 	DefaultName string
-	// DefaultPrice holds the default value on creation for the "price" field.
-	DefaultPrice float64
 )
 
 // OrderOption defines the ordering options for the Product queries.

@@ -9,7 +9,7 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	// DB database
-	client := database.DbConnection()
+	client, _ := database.DBCreation()
 
 	// Add mock data
 	database.AddProducts(client)

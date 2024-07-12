@@ -1,42 +1,34 @@
 version: '3.8'
 
 services:
-  go-fiber-ent-roach:
-    depends_on:
-      - roach
-    build:
-      context: .
-    container_name: rest-server
-    hostname: rest-server
-    networks:
-      - mynet
+  db:
+    image: mysql
+    restart: always
+    container_name: godockerDB
     ports:
-      - 80:8080
+      - "3307:3306"
     environment:
-      - PGUSER=${PGUSER:-totoro}
-      - PGPASSWORD=${PGPASSWORD:?database password not set}
-      - PGHOST=${PGHOST:-db}
-      - PGPORT=${PGPORT:-26257}
-      - PGDATABASE=${PGDATABASE:-mydb}
-    deploy:
-      restart_policy:
-        condition: on-failure
-  roach:
-    image: cockroachdb/cockroach:latest-v20.1
-    container_name: roach
-    hostname: db
-    networks:
-      - mynet
+      MYSQL_USER: docker
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: godocker
+
+  app:
+    container_name: full_app
+    build: .
     ports:
-      - 26257:26257
-      - 8080:8080
+      - "5001:5000"
+    restart: on-failure
     volumes:
-      - roach:/cockroach/cockroach-data
-    command: start-single-node --insecure
+      - api:/usr/src/app/
+    depends_on:
+      - db
+    networks:
+      - fullstack
 
 volumes:
-  roach:
+  api:
 
 networks:
-  mynet:
+  fullstack:
     driver: bridge

@@ -12,7 +12,7 @@ var (
 	ProductsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Default: "unknown"},
-		{Name: "price", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(6,2)", "postgres": "numeric"}},
+		{Name: "price", Type: field.TypeFloat64},
 	}
 	// ProductsTable holds the schema information for the "products" table.
 	ProductsTable = &schema.Table{
@@ -26,7 +26,7 @@ var (
 		{Name: "name", Type: field.TypeString, Default: "unknown"},
 		{Name: "surname", Type: field.TypeString, Default: "unknown"},
 		{Name: "email", Type: field.TypeString, Default: "unknown"},
-		{Name: "balance", Type: field.TypeFloat64, SchemaType: map[string]string{"mysql": "decimal(6,2)", "postgres": "numeric"}},
+		{Name: "balance", Type: field.TypeFloat64},
 		{Name: "username", Type: field.TypeString, Default: "unknown"},
 		{Name: "password", Type: field.TypeString, Default: "unknown"},
 	}

@@ -12,24 +12,11 @@ import (
 	"time"
 )
 
-func DbConnection() *ent.Client {
-	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
-	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
-	}
-	// Run the auto migration tool.
-	if err := client.Schema.Create(context.Background()); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
-	}
-
-	return client
-}
-
 const (
-	username = "root"
-	password = "password"
-	hostname = "127.0.0.1:3306"
-	dbname   = "ecommerce"
+	username = "docker"
+	password = "Milimada1956!"
+	hostname = "godockerDB:3306"
+	dbname   = "godocker"
 )
 
 func dsn(dbName string) string {
@@ -37,15 +24,15 @@ func dsn(dbName string) string {
 }
 
 func DBCreation() (*ent.Client, error) {
-
-	db, err := sql.Open("mysql", "docker:password@tcp(localhost:3307)/godocker")
+	db, err := sql.Open("mysql", dsn(dbname))
 	if err != nil {
-		log.Printf("Error %s when opening DB", err.Error())
-		return nil, err
+		log.Printf("Error %s when opening DB", err)
+		return nil, nil
 	}
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(100)
-	db.SetConnMaxLifetime(time.Hour)
+
+	db.SetMaxOpenConns(20)
+	db.SetMaxIdleConns(20)
+	db.SetConnMaxLifetime(time.Minute * 5)
 
 	// Create an ent.Driver from `db`.
 	drv := entsql.OpenDB("mysql", db)
@@ -54,9 +41,9 @@ func DBCreation() (*ent.Client, error) {
 
 	fmt.Println("db created")
 	//// Run the auto migration tool.
-	//if err := client.Schema.Create(context.Background()); err != nil {
-	//	log.Fatalf("failed creating schema resources: %v", err)
-	//}
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
 
 	return client, nil
 }

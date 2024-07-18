@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	_ "projectSwagger/docs"
 	"projectSwagger/internal/app/pkg/app"

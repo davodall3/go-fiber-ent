@@ -17,6 +17,15 @@ var products = []*model.Product{
 }
 
 func AddProducts(client *ent.Client) {
+	existedProducts, err := client.Product.
+		Query().
+		All(context.Background())
+
+	needToInsert := err == nil && len(existedProducts) == 0
+	if needToInsert == false {
+		return
+	}
+
 	for _, product := range products {
 		fmt.Println("Adding product: ", product.Name)
 		_, err := client.Product.Create().

@@ -1,6 +1,7 @@
 module projectSwagger
 
-go 1.22.5
+go 1.23
+
 
 require (
 	entgo.io/ent v0.13.1

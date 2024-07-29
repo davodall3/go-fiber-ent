@@ -11,6 +11,7 @@ services:
       - api:/usr/src/app/
     depends_on:
       - db
+      - rabbitmq
     networks:
       - fullstack
 
@@ -27,6 +28,19 @@ services:
       MYSQL_DATABASE: godocker
     networks:
       - fullstack
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER = guest
+      - RABBITMQ_DEFAULT_PASS = guest
+    networks:
+      fullstack:
+          aliases:
+            - rabbitmqManger
 
 volumes:
   api:

@@ -21,7 +21,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build -o /go-fiber-ent
 # But we can document in the Dockerfile what ports
 # the application is going to listen on by default.
 # https://docs.docker.com/reference/dockerfile/#expose
-EXPOSE 8080
+EXPOSE 8080 5672 15672
 
 # Run
 CMD ["/go-fiber-ent"]

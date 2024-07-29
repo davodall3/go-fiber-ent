@@ -2,17 +2,22 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/shopspring/decimal"
+	"projectSwagger/ent"
 	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/app/pkg/rabbitmq"
 	"projectSwagger/internal/app/pkg/service"
 )
 
 type UserHandler struct {
 	UserService service.UserService
+	Producer    rabbitmq.RabbitMQ
 }
 
-func NewUserHandler(service service.UserService) *UserHandler {
+func NewUserHandler(service service.UserService, producer rabbitmq.RabbitMQ) *UserHandler {
 	return &UserHandler{
 		UserService: service,
+		Producer:    producer,
 	}
 }
 
@@ -36,7 +41,15 @@ func (h *UserHandler) CreateUserHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	user, err := h.UserService.CreateUser(payload)
+	//user, err := h.UserService.CreateUser(payload)
+	//if err != nil {
+	//	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	//		"message": "User already exists",
+	//		"error":   err.Error(),
+	//	})
+	//}
+
+	err := h.Producer.CreateUser(payload)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "User already exists",
@@ -45,7 +58,14 @@ func (h *UserHandler) CreateUserHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": user,
+		"data": ent.User{
+			Username: payload.Username,
+			Password: payload.Password,
+			Name:     payload.Name,
+			Surname:  payload.Surname,
+			Email:    payload.Email,
+			Balance:  decimal.NewFromFloat(payload.Balance),
+		},
 	})
 }
 

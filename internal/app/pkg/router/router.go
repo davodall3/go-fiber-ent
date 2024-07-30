@@ -1,11 +1,16 @@
 package router
 
 import (
+	"context"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"os"
+	"os/signal"
 	"projectSwagger/internal/app/pkg/database"
 	"projectSwagger/internal/app/pkg/handler"
 	"projectSwagger/internal/app/pkg/rabbitmq"
 	"projectSwagger/internal/app/pkg/service"
+	"syscall"
 )
 
 func SetupRoutes(app *fiber.App) {
@@ -22,20 +27,35 @@ func SetupRoutes(app *fiber.App) {
 
 	// RabbitMQ
 	rabbitMQ := rabbitmq.NewRabbitMQ()
-	consume := rabbitmq.Consumer{
-		UserService: *userService,
-		RabbitMQ:    rabbitMQ,
-	}
-	consume.ListenAndServe()
 
 	// Handlers
 	userHandler := handler.NewUserHandler(*userService, *rabbitMQ)
 	authHandler := handler.NewAuthHandler(*authService)
 	productHandler := handler.NewProductHandler(*productService)
+
 	// API
 	app.Post("/users", userHandler.CreateUserHandler)
 	app.Get("/users/all", userHandler.GetAllUsersHandler)
 	app.Post("/login", authHandler.LoginUserHandler)
 	app.Get("/products/all", productHandler.GetAllProductsHandler)
 	app.Post("/products/buy", productHandler.BuyProductHandler)
+
+	errC := make(chan error, 1)
+	ctx, stop := signal.NotifyContext(context.Background(),
+		os.Interrupt,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+
+	go func() {
+		<-ctx.Done()
+		defer func() {
+			fmt.Println("Closing all connections")
+			rabbitMQ.Channel.Close()
+			rabbitMQ.Connection.Close()
+			client.Close()
+			stop()
+			close(errC)
+		}()
+
+	}()
 }

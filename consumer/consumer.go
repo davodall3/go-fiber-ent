@@ -1,21 +1,24 @@
-package rabbitmq
+package main
 
 import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"projectSwagger/internal/app/model"
-	"projectSwagger/internal/app/pkg/service"
 )
 
-type Consumer struct {
-	RabbitMQ    RabbitMQ
-	UserService service.UserService
-}
+func main() {
+	conn, err := amqp.Dial("amqp://guest:guest@0.0.0.0:5672")
+	failOnError(err, "Failed to connect to RabbitMQ")
 
-func (c *Consumer) ListenAndServe() {
-	queue, err := c.RabbitMQ.Channel.QueueDeclare(
+	fmt.Println("Successfully connected to RabbitMQ")
+	channel, err := conn.Channel()
+	failOnError(err, "Failed to open a channel")
+	fmt.Println("Successfully open a channel")
+
+	queue, err := channel.QueueDeclare(
 		"user-queue",
 		false,
 		false,
@@ -25,7 +28,8 @@ func (c *Consumer) ListenAndServe() {
 	)
 	failOnError(err, "Failed to declare a queue")
 	fmt.Printf("Queue Declared About to %s\n", queue.Name)
-	err = c.RabbitMQ.Channel.QueueBind(
+
+	err = channel.QueueBind(
 		queue.Name,
 		"users.event.*",
 		"users",
@@ -35,7 +39,7 @@ func (c *Consumer) ListenAndServe() {
 	failOnError(err, "Failed to bind a queue")
 	fmt.Printf("Queue Binding About to %s\n", queue.Name)
 
-	msgs, err := c.RabbitMQ.Channel.Consume(
+	msgs, err := channel.Consume(
 		queue.Name,
 		"user-consumer",
 		false,
@@ -47,23 +51,17 @@ func (c *Consumer) ListenAndServe() {
 	failOnError(err, "Failed to register a consumer")
 	fmt.Printf("Consumer Registred About to queue %s\n", queue.Name)
 
-	forever := make(chan bool)
-	go func() {
-		for msg := range msgs {
-			log.Printf("Received a RoutingKey: %s", msg.RoutingKey)
-			switch msg.RoutingKey {
-			case "users.event.create":
-				user, err := decodeUserBody(msg.Body)
-				if err != nil {
-					log.Println(err)
-				}
-				fmt.Println("Created user", user)
-			}
-		}
+	var forever chan struct{}
 
-		<-forever
+	go func() {
+		for d := range msgs {
+			log.Printf(" Body == %s", d.Body)
+			log.Printf(" RoutingKey == %s", d.RoutingKey)
+		}
 	}()
 
+	log.Printf(" [*] Waiting for logs. To exit press CTRL+C")
+	<-forever
 }
 
 func decodeUserBody(body []byte) (*model.UserBody, error) {
@@ -72,4 +70,10 @@ func decodeUserBody(body []byte) (*model.UserBody, error) {
 		return usr, err
 	}
 	return usr, nil
+}
+
+func failOnError(err error, msg string) {
+	if err != nil {
+		log.Panicf("%s: %s", msg, err)
+	}
 }

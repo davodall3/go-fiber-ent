@@ -1,5 +1,8 @@
 package repository
 
+import "projectSwagger/internal/app/model"
+
 type UserRepository interface {
-	CreateUser() error
+	CreateUser(body *model.UserBody) error
+	GetAllUser() error
 }

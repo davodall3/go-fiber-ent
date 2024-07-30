@@ -2,8 +2,6 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/shopspring/decimal"
-	"projectSwagger/ent"
 	"projectSwagger/internal/app/model"
 	"projectSwagger/internal/app/pkg/rabbitmq"
 	"projectSwagger/internal/app/pkg/service"
@@ -41,15 +39,15 @@ func (h *UserHandler) CreateUserHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	//user, err := h.UserService.CreateUser(payload)
-	//if err != nil {
-	//	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-	//		"message": "User already exists",
-	//		"error":   err.Error(),
-	//	})
-	//}
+	user, err := h.UserService.CreateUser(payload)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "User already exists",
+			"error":   err.Error(),
+		})
+	}
 
-	err := h.Producer.CreateUser(payload)
+	err = h.Producer.CreateUser(payload)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "User already exists",
@@ -58,14 +56,7 @@ func (h *UserHandler) CreateUserHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"data": ent.User{
-			Username: payload.Username,
-			Password: payload.Password,
-			Name:     payload.Name,
-			Surname:  payload.Surname,
-			Email:    payload.Email,
-			Balance:  decimal.NewFromFloat(payload.Balance),
-		},
+		"data": user,
 	})
 }
 
@@ -86,6 +77,15 @@ func (h *UserHandler) GetAllUsersHandler(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
+
+	err = h.Producer.GetAllUsers()
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "User already exists",
+			"error":   err.Error(),
+		})
+	}
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"data": users,
 	})

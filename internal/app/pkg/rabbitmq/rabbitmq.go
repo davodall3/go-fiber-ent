@@ -1,6 +1,7 @@
 package rabbitmq
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -50,9 +51,14 @@ func NewRabbitMQ() *RabbitMQ {
 	}
 }
 
-func (p *RabbitMQ) CreateUser(body *model.UserBody) error {
+func (r *RabbitMQ) CreateUser(body *model.UserBody) error {
 	fmt.Println("User created RabbitMQ")
-	return p.publish("users.event.create", body)
+	return r.publish("users.event.create", body)
+}
+
+func (r *RabbitMQ) GetAllUser() error {
+	fmt.Println("Get all users RabbitMQ")
+	return r.publish("users.event.getAll", nil)
 }
 
 func (p *RabbitMQ) publish(routingKey string, event interface{}) error {
@@ -60,8 +66,11 @@ func (p *RabbitMQ) publish(routingKey string, event interface{}) error {
 	if err != nil {
 		return err
 	}
-
-	err = p.Channel.Publish(
+	fmt.Println("json created ===>> ", string(eventJson))
+	fmt.Println("routingKey ===>> ", routingKey)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	err = p.Channel.PublishWithContext(ctx,
 		"users",
 		routingKey,
 		false,
@@ -69,10 +78,11 @@ func (p *RabbitMQ) publish(routingKey string, event interface{}) error {
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        eventJson,
-			Timestamp:   time.Now(),
 		})
 	if err != nil {
+		fmt.Println("publishing error === ", err)
 		return err
 	}
+	fmt.Println("published ===>> ", string(eventJson))
 	return nil
 }

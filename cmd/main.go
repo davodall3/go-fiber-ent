@@ -4,7 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	_ "projectSwagger/docs"
-	"projectSwagger/internal/app/pkg/app"
+	"projectSwagger/internal/app"
 )
 
 func main() {

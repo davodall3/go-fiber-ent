@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	"projectSwagger/internal/app/mw"
-	"projectSwagger/internal/app/pkg/router"
+	"projectSwagger/internal/mw"
+	"projectSwagger/internal/pkg/router"
 )
 
 type App struct {

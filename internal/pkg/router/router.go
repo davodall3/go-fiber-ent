@@ -6,10 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"os"
 	"os/signal"
-	"projectSwagger/internal/app/pkg/database"
-	"projectSwagger/internal/app/pkg/handler"
-	"projectSwagger/internal/app/pkg/rabbitmq"
-	"projectSwagger/internal/app/pkg/service"
+	"projectSwagger/internal/pkg/database"
+	"projectSwagger/internal/pkg/handler"
+	"projectSwagger/internal/pkg/rabbitmq"
+	"projectSwagger/internal/pkg/service"
 	"syscall"
 )
 
@@ -56,6 +56,5 @@ func SetupRoutes(app *fiber.App) {
 			stop()
 			close(errC)
 		}()
-
 	}()
 }

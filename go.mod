@@ -8,6 +8,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/swagger v1.1.0
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/swaggo/swag v1.16.3
 )
@@ -34,7 +35,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
-	github.com/rabbitmq/amqp091-go v1.10.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/swaggo/files/v2 v2.0.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

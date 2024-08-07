@@ -6,7 +6,7 @@ import (
 	"projectSwagger/ent"
 	"projectSwagger/ent/product"
 	"projectSwagger/ent/user"
-	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/model"
 )
 
 type ProductService struct {

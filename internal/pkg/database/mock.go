@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/shopspring/decimal"
 	"projectSwagger/ent"
-	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/model"
 )
 
 var products = []*model.Product{

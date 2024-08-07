@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"projectSwagger/internal/app/model"
-	"projectSwagger/internal/app/pkg/service"
+	"projectSwagger/internal/model"
+	"projectSwagger/internal/pkg/service"
 )
 
 type ProductHandler struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/shopspring/decimal"
 	"projectSwagger/ent"
-	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/model"
 )
 
 type UserService struct {

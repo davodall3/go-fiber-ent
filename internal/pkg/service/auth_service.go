@@ -4,7 +4,7 @@ import (
 	"context"
 	"projectSwagger/ent"
 	"projectSwagger/ent/user"
-	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/model"
 )
 
 type AuthService struct {

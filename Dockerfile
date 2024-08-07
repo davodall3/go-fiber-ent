@@ -14,7 +14,7 @@ RUN go mod download
 COPY .. ./
 
 # Build
-RUN CGO_ENABLED=1 GOOS=linux go build -o /go-fiber-ent
+RUN CGO_ENABLED=1 GOOS=linux go build -o main ./cmd
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
@@ -24,4 +24,4 @@ RUN CGO_ENABLED=1 GOOS=linux go build -o /go-fiber-ent
 EXPOSE 8080 5672 15672
 
 # Run
-CMD ["/go-fiber-ent"]
+CMD ["./main"]

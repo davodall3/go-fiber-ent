@@ -15,8 +15,10 @@ import (
 const (
 	username = "docker"
 	password = "Milimada1956!"
-	hostname = "godockerDB:3306"
-	dbname   = "godocker"
+	hostname = "godockerDB:3306" // docker
+	dbname   = "godocker"        // docker
+	//hostname = "localhost:3306" // local
+	//dbname   = "godockerDB"     // local
 )
 
 func dsn(dbName string) string {

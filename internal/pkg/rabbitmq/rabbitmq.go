@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
-	"projectSwagger/internal/app/model"
+	"projectSwagger/internal/model"
 	"time"
 )
 
@@ -17,7 +17,8 @@ type RabbitMQ struct {
 
 // NewRabbitMQ ...
 func NewRabbitMQ() *RabbitMQ {
-	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672")
+	//conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/") // local
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672") //docker
 	failOnError(err, "Failed to connect to RabbitMQ")
 
 	fmt.Println("Successfully connected to RabbitMQ")

@@ -30,34 +30,45 @@ func (p *ProductService) GetAllProducts() ([]*ent.Product, error) {
 }
 
 func (p *ProductService) BuyProduct(payload *model.BuyProductBody) (*ent.User, error) {
-	u, userError := p.Client.User.
+	ctx := context.Background()
+
+	userData, userError := p.Client.User.
 		Query().
 		Where(user.ID(payload.UserId)).
-		Only(context.Background())
+		Only(ctx)
 
 	if userError != nil {
 		return nil, userError
 	}
 
-	prod, productError := p.Client.Product.
+	productData, productError := p.Client.Product.
 		Query().
 		Where(product.ID(payload.ProductId)).
-		Only(context.Background())
+		Only(ctx)
 
 	if productError != nil {
 		return nil, productError
 	}
 
-	difference := u.Balance.Sub(prod.Price)
+	difference := userData.Balance.Sub(productData.Price)
 
 	if difference.IsNegative() {
 		return nil, &template.Error{Name: "The user's balance is insufficient"}
 	}
 
 	updatedUser, err := p.Client.User.
-		UpdateOneID(u.ID).
+		UpdateOneID(userData.ID).
 		SetBalance(difference).
 		Save(context.Background())
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = p.Client.Product.
+		UpdateOneID(updatedUser.ID).
+		SetQuantity(productData.Quantity - 1).
+		Save(ctx)
 
 	if err != nil {
 		return nil, err

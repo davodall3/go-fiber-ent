@@ -13,6 +13,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString, Default: "unknown"},
 		{Name: "price", Type: field.TypeFloat64},
+		{Name: "quantity", Type: field.TypeInt, Default: 0},
 	}
 	// ProductsTable holds the schema information for the "products" table.
 	ProductsTable = &schema.Table{

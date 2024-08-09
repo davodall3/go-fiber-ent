@@ -18,6 +18,10 @@ func init() {
 	productDescName := productFields[0].Descriptor()
 	// product.DefaultName holds the default value on creation for the name field.
 	product.DefaultName = productDescName.Default.(string)
+	// productDescQuantity is the schema descriptor for quantity field.
+	productDescQuantity := productFields[2].Descriptor()
+	// product.DefaultQuantity holds the default value on creation for the quantity field.
+	product.DefaultQuantity = productDescQuantity.Default.(int)
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescName is the schema descriptor for name field.

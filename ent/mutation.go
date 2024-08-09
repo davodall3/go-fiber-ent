@@ -38,6 +38,8 @@ type ProductMutation struct {
 	name          *string
 	price         *decimal.Decimal
 	addprice      *decimal.Decimal
+	quantity      *int
+	addquantity   *int
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*Product, error)
@@ -234,6 +236,62 @@ func (m *ProductMutation) ResetPrice() {
 	m.addprice = nil
 }
 
+// SetQuantity sets the "quantity" field.
+func (m *ProductMutation) SetQuantity(i int) {
+	m.quantity = &i
+	m.addquantity = nil
+}
+
+// Quantity returns the value of the "quantity" field in the mutation.
+func (m *ProductMutation) Quantity() (r int, exists bool) {
+	v := m.quantity
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldQuantity returns the old "quantity" field's value of the Product entity.
+// If the Product object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProductMutation) OldQuantity(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldQuantity is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldQuantity requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldQuantity: %w", err)
+	}
+	return oldValue.Quantity, nil
+}
+
+// AddQuantity adds i to the "quantity" field.
+func (m *ProductMutation) AddQuantity(i int) {
+	if m.addquantity != nil {
+		*m.addquantity += i
+	} else {
+		m.addquantity = &i
+	}
+}
+
+// AddedQuantity returns the value that was added to the "quantity" field in this mutation.
+func (m *ProductMutation) AddedQuantity() (r int, exists bool) {
+	v := m.addquantity
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetQuantity resets all changes to the "quantity" field.
+func (m *ProductMutation) ResetQuantity() {
+	m.quantity = nil
+	m.addquantity = nil
+}
+
 // Where appends a list predicates to the ProductMutation builder.
 func (m *ProductMutation) Where(ps ...predicate.Product) {
 	m.predicates = append(m.predicates, ps...)
@@ -268,12 +326,15 @@ func (m *ProductMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProductMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 3)
 	if m.name != nil {
 		fields = append(fields, product.FieldName)
 	}
 	if m.price != nil {
 		fields = append(fields, product.FieldPrice)
+	}
+	if m.quantity != nil {
+		fields = append(fields, product.FieldQuantity)
 	}
 	return fields
 }
@@ -287,6 +348,8 @@ func (m *ProductMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case product.FieldPrice:
 		return m.Price()
+	case product.FieldQuantity:
+		return m.Quantity()
 	}
 	return nil, false
 }
@@ -300,6 +363,8 @@ func (m *ProductMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldName(ctx)
 	case product.FieldPrice:
 		return m.OldPrice(ctx)
+	case product.FieldQuantity:
+		return m.OldQuantity(ctx)
 	}
 	return nil, fmt.Errorf("unknown Product field %s", name)
 }
@@ -323,6 +388,13 @@ func (m *ProductMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetPrice(v)
 		return nil
+	case product.FieldQuantity:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetQuantity(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Product field %s", name)
 }
@@ -334,6 +406,9 @@ func (m *ProductMutation) AddedFields() []string {
 	if m.addprice != nil {
 		fields = append(fields, product.FieldPrice)
 	}
+	if m.addquantity != nil {
+		fields = append(fields, product.FieldQuantity)
+	}
 	return fields
 }
 
@@ -344,6 +419,8 @@ func (m *ProductMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case product.FieldPrice:
 		return m.AddedPrice()
+	case product.FieldQuantity:
+		return m.AddedQuantity()
 	}
 	return nil, false
 }
@@ -359,6 +436,13 @@ func (m *ProductMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddPrice(v)
+		return nil
+	case product.FieldQuantity:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddQuantity(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Product numeric field %s", name)
@@ -392,6 +476,9 @@ func (m *ProductMutation) ResetField(name string) error {
 		return nil
 	case product.FieldPrice:
 		m.ResetPrice()
+		return nil
+	case product.FieldQuantity:
+		m.ResetQuantity()
 		return nil
 	}
 	return fmt.Errorf("unknown Product field %s", name)

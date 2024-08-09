@@ -63,6 +63,27 @@ func (pu *ProductUpdate) AddPrice(d decimal.Decimal) *ProductUpdate {
 	return pu
 }
 
+// SetQuantity sets the "quantity" field.
+func (pu *ProductUpdate) SetQuantity(i int) *ProductUpdate {
+	pu.mutation.ResetQuantity()
+	pu.mutation.SetQuantity(i)
+	return pu
+}
+
+// SetNillableQuantity sets the "quantity" field if the given value is not nil.
+func (pu *ProductUpdate) SetNillableQuantity(i *int) *ProductUpdate {
+	if i != nil {
+		pu.SetQuantity(*i)
+	}
+	return pu
+}
+
+// AddQuantity adds i to the "quantity" field.
+func (pu *ProductUpdate) AddQuantity(i int) *ProductUpdate {
+	pu.mutation.AddQuantity(i)
+	return pu
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pu *ProductUpdate) Mutation() *ProductMutation {
 	return pu.mutation
@@ -112,6 +133,12 @@ func (pu *ProductUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.AddedPrice(); ok {
 		_spec.AddField(product.FieldPrice, field.TypeFloat64, value)
+	}
+	if value, ok := pu.mutation.Quantity(); ok {
+		_spec.SetField(product.FieldQuantity, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedQuantity(); ok {
+		_spec.AddField(product.FieldQuantity, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -165,6 +192,27 @@ func (puo *ProductUpdateOne) SetNillablePrice(d *decimal.Decimal) *ProductUpdate
 // AddPrice adds d to the "price" field.
 func (puo *ProductUpdateOne) AddPrice(d decimal.Decimal) *ProductUpdateOne {
 	puo.mutation.AddPrice(d)
+	return puo
+}
+
+// SetQuantity sets the "quantity" field.
+func (puo *ProductUpdateOne) SetQuantity(i int) *ProductUpdateOne {
+	puo.mutation.ResetQuantity()
+	puo.mutation.SetQuantity(i)
+	return puo
+}
+
+// SetNillableQuantity sets the "quantity" field if the given value is not nil.
+func (puo *ProductUpdateOne) SetNillableQuantity(i *int) *ProductUpdateOne {
+	if i != nil {
+		puo.SetQuantity(*i)
+	}
+	return puo
+}
+
+// AddQuantity adds i to the "quantity" field.
+func (puo *ProductUpdateOne) AddQuantity(i int) *ProductUpdateOne {
+	puo.mutation.AddQuantity(i)
 	return puo
 }
 
@@ -247,6 +295,12 @@ func (puo *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err e
 	}
 	if value, ok := puo.mutation.AddedPrice(); ok {
 		_spec.AddField(product.FieldPrice, field.TypeFloat64, value)
+	}
+	if value, ok := puo.mutation.Quantity(); ok {
+		_spec.SetField(product.FieldQuantity, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedQuantity(); ok {
+		_spec.AddField(product.FieldQuantity, field.TypeInt, value)
 	}
 	_node = &Product{config: puo.config}
 	_spec.Assign = _node.assignValues

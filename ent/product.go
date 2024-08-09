@@ -20,7 +20,9 @@ type Product struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Price holds the value of the "price" field.
-	Price        decimal.Decimal `json:"price,omitempty"`
+	Price decimal.Decimal `json:"price,omitempty"`
+	// Quantity holds the value of the "quantity" field.
+	Quantity     int `json:"quantity,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -31,7 +33,7 @@ func (*Product) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case product.FieldPrice:
 			values[i] = new(decimal.Decimal)
-		case product.FieldID:
+		case product.FieldID, product.FieldQuantity:
 			values[i] = new(sql.NullInt64)
 		case product.FieldName:
 			values[i] = new(sql.NullString)
@@ -67,6 +69,12 @@ func (pr *Product) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field price", values[i])
 			} else if value != nil {
 				pr.Price = *value
+			}
+		case product.FieldQuantity:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field quantity", values[i])
+			} else if value.Valid {
+				pr.Quantity = int(value.Int64)
 			}
 		default:
 			pr.selectValues.Set(columns[i], values[i])
@@ -109,6 +117,9 @@ func (pr *Product) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("price=")
 	builder.WriteString(fmt.Sprintf("%v", pr.Price))
+	builder.WriteString(", ")
+	builder.WriteString("quantity=")
+	builder.WriteString(fmt.Sprintf("%v", pr.Quantity))
 	builder.WriteByte(')')
 	return builder.String()
 }

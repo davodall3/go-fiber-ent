@@ -64,6 +64,11 @@ func Price(v decimal.Decimal) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldPrice, v))
 }
 
+// Quantity applies equality check predicate on the "quantity" field. It's identical to QuantityEQ.
+func Quantity(v int) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldQuantity, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Product {
 	return predicate.Product(sql.FieldEQ(FieldName, v))
@@ -167,6 +172,46 @@ func PriceLT(v decimal.Decimal) predicate.Product {
 // PriceLTE applies the LTE predicate on the "price" field.
 func PriceLTE(v decimal.Decimal) predicate.Product {
 	return predicate.Product(sql.FieldLTE(FieldPrice, v))
+}
+
+// QuantityEQ applies the EQ predicate on the "quantity" field.
+func QuantityEQ(v int) predicate.Product {
+	return predicate.Product(sql.FieldEQ(FieldQuantity, v))
+}
+
+// QuantityNEQ applies the NEQ predicate on the "quantity" field.
+func QuantityNEQ(v int) predicate.Product {
+	return predicate.Product(sql.FieldNEQ(FieldQuantity, v))
+}
+
+// QuantityIn applies the In predicate on the "quantity" field.
+func QuantityIn(vs ...int) predicate.Product {
+	return predicate.Product(sql.FieldIn(FieldQuantity, vs...))
+}
+
+// QuantityNotIn applies the NotIn predicate on the "quantity" field.
+func QuantityNotIn(vs ...int) predicate.Product {
+	return predicate.Product(sql.FieldNotIn(FieldQuantity, vs...))
+}
+
+// QuantityGT applies the GT predicate on the "quantity" field.
+func QuantityGT(v int) predicate.Product {
+	return predicate.Product(sql.FieldGT(FieldQuantity, v))
+}
+
+// QuantityGTE applies the GTE predicate on the "quantity" field.
+func QuantityGTE(v int) predicate.Product {
+	return predicate.Product(sql.FieldGTE(FieldQuantity, v))
+}
+
+// QuantityLT applies the LT predicate on the "quantity" field.
+func QuantityLT(v int) predicate.Product {
+	return predicate.Product(sql.FieldLT(FieldQuantity, v))
+}
+
+// QuantityLTE applies the LTE predicate on the "quantity" field.
+func QuantityLTE(v int) predicate.Product {
+	return predicate.Product(sql.FieldLTE(FieldQuantity, v))
 }
 
 // And groups predicates with the AND operator between them.

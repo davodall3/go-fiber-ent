@@ -15,6 +15,8 @@ const (
 	FieldName = "name"
 	// FieldPrice holds the string denoting the price field in the database.
 	FieldPrice = "price"
+	// FieldQuantity holds the string denoting the quantity field in the database.
+	FieldQuantity = "quantity"
 	// Table holds the table name of the product in the database.
 	Table = "products"
 )
@@ -24,6 +26,7 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldPrice,
+	FieldQuantity,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -39,6 +42,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultName holds the default value on creation for the "name" field.
 	DefaultName string
+	// DefaultQuantity holds the default value on creation for the "quantity" field.
+	DefaultQuantity int
 )
 
 // OrderOption defines the ordering options for the Product queries.
@@ -57,4 +62,9 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByPrice orders the results by the price field.
 func ByPrice(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrice, opts...).ToFunc()
+}
+
+// ByQuantity orders the results by the quantity field.
+func ByQuantity(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldQuantity, opts...).ToFunc()
 }

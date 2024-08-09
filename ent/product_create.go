@@ -40,6 +40,20 @@ func (pc *ProductCreate) SetPrice(d decimal.Decimal) *ProductCreate {
 	return pc
 }
 
+// SetQuantity sets the "quantity" field.
+func (pc *ProductCreate) SetQuantity(i int) *ProductCreate {
+	pc.mutation.SetQuantity(i)
+	return pc
+}
+
+// SetNillableQuantity sets the "quantity" field if the given value is not nil.
+func (pc *ProductCreate) SetNillableQuantity(i *int) *ProductCreate {
+	if i != nil {
+		pc.SetQuantity(*i)
+	}
+	return pc
+}
+
 // Mutation returns the ProductMutation object of the builder.
 func (pc *ProductCreate) Mutation() *ProductMutation {
 	return pc.mutation
@@ -79,6 +93,10 @@ func (pc *ProductCreate) defaults() {
 		v := product.DefaultName
 		pc.mutation.SetName(v)
 	}
+	if _, ok := pc.mutation.Quantity(); !ok {
+		v := product.DefaultQuantity
+		pc.mutation.SetQuantity(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -88,6 +106,9 @@ func (pc *ProductCreate) check() error {
 	}
 	if _, ok := pc.mutation.Price(); !ok {
 		return &ValidationError{Name: "price", err: errors.New(`ent: missing required field "Product.price"`)}
+	}
+	if _, ok := pc.mutation.Quantity(); !ok {
+		return &ValidationError{Name: "quantity", err: errors.New(`ent: missing required field "Product.quantity"`)}
 	}
 	return nil
 }
@@ -122,6 +143,10 @@ func (pc *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Price(); ok {
 		_spec.SetField(product.FieldPrice, field.TypeFloat64, value)
 		_node.Price = value
+	}
+	if value, ok := pc.mutation.Quantity(); ok {
+		_spec.SetField(product.FieldQuantity, field.TypeInt, value)
+		_node.Quantity = value
 	}
 	return _node, _spec
 }

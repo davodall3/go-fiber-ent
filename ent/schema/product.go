@@ -15,8 +15,8 @@ type Product struct {
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").Default("unknown"),
-		field.Float("price").
-			GoType(decimal.Decimal{}),
+		field.Float("price").GoType(decimal.Decimal{}),
+		field.Int("quantity").Default(0),
 	}
 }
 

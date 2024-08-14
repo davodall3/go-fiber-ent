@@ -63,7 +63,7 @@ func (p *ProductHandler) BuyProductHandler(c *fiber.Ctx) error {
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Can't buy product",
+			"message": "Can't buy the product",
 			"error":   err.Error(),
 		})
 	}

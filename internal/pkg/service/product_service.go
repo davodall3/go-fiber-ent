@@ -49,6 +49,9 @@ func (p *ProductService) BuyProduct(payload *model.BuyProductBody) (*ent.User, e
 	if productError != nil {
 		return nil, productError
 	}
+	if productData.Quantity == 0 {
+		return nil, &template.Error{Name: "The given product is out of stock."}
+	}
 
 	difference := userData.Balance.Sub(productData.Price)
 
@@ -66,7 +69,7 @@ func (p *ProductService) BuyProduct(payload *model.BuyProductBody) (*ent.User, e
 	}
 
 	_, err = p.Client.Product.
-		UpdateOneID(updatedUser.ID).
+		UpdateOneID(productData.ID).
 		SetQuantity(productData.Quantity - 1).
 		Save(ctx)
 

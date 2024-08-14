@@ -15,15 +15,15 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	// DB database
-	client, _ := database.DBCreation()
+	db, _ := database.DBCreation()
 
 	// Add mock data
-	database.AddProducts(client)
+	database.AddProducts(db)
 
 	// Services
-	userService := service.NewUserService(client)
-	authService := service.NewAuthService(client)
-	productService := service.NewProductService(client)
+	userService := service.NewUserService(db)
+	authService := service.NewAuthService(db)
+	productService := service.NewProductService(db)
 
 	// RabbitMQ
 	rabbitMQ := rabbitmq.NewRabbitMQ()
@@ -52,7 +52,7 @@ func SetupRoutes(app *fiber.App) {
 			fmt.Println("Closing all connections")
 			rabbitMQ.Channel.Close()
 			rabbitMQ.Connection.Close()
-			client.Close()
+			db.Close()
 			stop()
 			close(errC)
 		}()

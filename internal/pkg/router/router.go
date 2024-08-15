@@ -10,10 +10,12 @@ import (
 	"projectSwagger/internal/pkg/handler"
 	"projectSwagger/internal/pkg/rabbitmq"
 	"projectSwagger/internal/pkg/service"
+	"sync"
 	"syscall"
 )
 
 func SetupRoutes(app *fiber.App) {
+	var wg sync.WaitGroup
 	// DB database
 	db, _ := database.DBCreation()
 
@@ -38,13 +40,21 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/users/all", userHandler.GetAllUsersHandler)
 	app.Post("/login", authHandler.LoginUserHandler)
 	app.Get("/products/all", productHandler.GetAllProductsHandler)
-	app.Post("/products/buy", productHandler.BuyProductHandler)
+	go func() {
+		wg.Add(1)
+		app.Post("/products/buy", productHandler.BuyProductHandler)
+		wg.Done()
+	}()
+
+	wg.Wait()
 
 	errC := make(chan error, 1)
-	ctx, stop := signal.NotifyContext(context.Background(),
+	ctx, stop := signal.NotifyContext(
+		context.Background(),
 		os.Interrupt,
 		syscall.SIGTERM,
-		syscall.SIGQUIT)
+		syscall.SIGQUIT,
+	)
 
 	go func() {
 		<-ctx.Done()
